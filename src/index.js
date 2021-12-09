@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 const models = require("../models");
 
 const userRoutes = require("./UserRoutes");
+const entryRoutes = require("./EntryRoutes");
 
 const oneDay = 1000 * 60 * 60 * 24;
 
@@ -25,6 +26,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 
 app.use("/", userRoutes);
+app.use("/", entryRoutes);
 
 // Set routes
 app.get("/", async (req, res) => {
