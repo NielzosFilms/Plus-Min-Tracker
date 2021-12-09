@@ -75,6 +75,8 @@ router.post("/entries/create", async (req, res) => {
 		} else {
 			await entry.setPlusTags([req.body.plusTags]);
 		}
+	} else {
+		await entry.setPlusTags([]);
 	}
 	if (req.body.minusTags) {
 		if (Array.isArray(req.body.minusTags)) {
@@ -82,6 +84,8 @@ router.post("/entries/create", async (req, res) => {
 		} else {
 			await entry.setMinusTags([req.body.minusTags]);
 		}
+	} else {
+		await entry.setMinusTags([]);
 	}
 	await entry.save();
 	res.redirect(`/entries/${entry.id}`);
@@ -149,6 +153,8 @@ router.post("/entries/:id", async (req, res) => {
 		} else {
 			await entry.setPlusTags([req.body.plusTags]);
 		}
+	} else {
+		await entry.setPlusTags([]);
 	}
 	if (req.body.minusTags) {
 		if (Array.isArray(req.body.minusTags)) {
@@ -156,6 +162,8 @@ router.post("/entries/:id", async (req, res) => {
 		} else {
 			await entry.setMinusTags([req.body.minusTags]);
 		}
+	} else {
+		await entry.setMinusTags([]);
 	}
 	await entry.save();
 	res.redirect(`/entries/${entry.id}`);

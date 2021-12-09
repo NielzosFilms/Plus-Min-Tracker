@@ -49,6 +49,7 @@
 								multiple
 								class="form-control"
 							>
+								<option value="">None...</option>
 								<% tags.forEach((tag) => { %>
 								<option value="<%= tag.id %>" <%= entry.plusTags.some(plusTag => plusTag.id === tag.id) ? "selected" : "" %>>
 									<%= tag.name %>
@@ -64,6 +65,7 @@
 								multiple
 								class="form-control"
 							>
+								<option value="">None...</option>
 								<% tags.forEach((tag) => { %>
 								<option value="<%= tag.id %>" <%= entry.minusTags.some(minusTag => minusTag.id === tag.id) ? "selected" : "" %>>
 									<%= tag.name %>
