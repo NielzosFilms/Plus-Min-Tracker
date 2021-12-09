@@ -1,6 +1,6 @@
 const express = require("express");
 const session = require("express-session");
-const {v4: uuidv4} = require("uuid");
+const { v4: uuidv4 } = require("uuid");
 
 const models = require("../models");
 
@@ -9,13 +9,13 @@ const userRoutes = require("./UserRoutes");
 const oneDay = 1000 * 60 * 60 * 24;
 
 const app = express();
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
 	session({
 		secret: uuidv4(),
 		saveUninitialized: true,
-		cookie: {maxAge: oneDay * 7},
+		cookie: { maxAge: oneDay * 7 },
 		resave: false,
 	})
 );
@@ -27,15 +27,28 @@ app.use(express.static("public"));
 app.use("/", userRoutes);
 
 // Set routes
-app.get("/", (req, res) => {
-	console.log(req.session);
+app.get("/", async (req, res) => {
+	if (req.session.user) {
+		const entries = await models.Entry.findAll({
+			where: {
+				userId: req.session.user.id,
+			},
+		});
+		res.render("dashboard", {
+			user: req.session.user,
+			entries,
+			menu: "dashboard",
+		});
+	} else {
+		res.render("index", { menu: "dashboard" });
+	}
+});
 
-	// query the database for all users with sequelize findAll method and then render the index page with the users array as a parameter to the ejs file
-	models.User.findAll().then((users) => {
-		res.render("index", {users: users});
+// 404 route
+app.use((req, res) => {
+	res.status(404).render("404", {
+		user: req.session.user,
 	});
-
-	// res.render("index", { user: req.session.user });
 });
 
 // Start server

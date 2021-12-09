@@ -100,23 +100,22 @@ router.post("/register", (req, res) => {
 	}
 });
 
-// express profile route for user with the app variable
-router.get("/profile", (req, res) => {
+router.get("/account", (req, res) => {
 	if (req.session.user) {
-		res.render("profile", { user: req.session.user });
+		res.render("account", { user: req.session.user, validationErrors: [] });
 	} else {
 		res.redirect("/login");
 	}
 });
 
 // express update route for user with the app variable
-router.post("/update", (req, res) => {
+router.post("/account", async (req, res) => {
 	// check if logged in
 	if (req.session.user) {
 		// check if password is empty
 		if (req.body.password === "") {
 			// update user without password
-			models.User.update(
+			await models.User.update(
 				{
 					username: req.body.username,
 				},
@@ -125,13 +124,23 @@ router.post("/update", (req, res) => {
 						id: req.session.user.id,
 					},
 				}
-			).then((user) => {
-				req.session.user.username = req.body.username;
-				res.redirect("/profile");
+			);
+			// update session user
+			req.session.user = await models.User.findOne({
+				where: {
+					id: req.session.user.id,
+				},
 			});
 		} else {
+			if (req.body.password !== req.body.passwordConfirm) {
+				res.render("account", {
+					user: req.session.user,
+					validationErrors: [{ msg: "Passwords do not match" }],
+				});
+				return;
+			}
 			// update user with password
-			models.User.update(
+			await models.User.update(
 				{
 					username: req.body.username,
 					password: passwordHash.generate(req.body.password),
@@ -141,14 +150,15 @@ router.post("/update", (req, res) => {
 						id: req.session.user.id,
 					},
 				}
-			).then((user) => {
-				req.session.user.username = req.body.username;
-				req.session.user.password = passwordHash.generate(
-					req.body.password
-				);
-				res.redirect("/profile");
+			);
+			// update session user
+			req.session.user = await models.User.findOne({
+				where: {
+					id: req.session.user.id,
+				},
 			});
 		}
+		res.redirect("/account");
 	} else {
 		res.redirect("/login");
 	}
