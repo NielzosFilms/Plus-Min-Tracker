@@ -58,7 +58,7 @@ app.get("/", async (req, res) => {
 					where: {
 						userId: req.session.user.id,
 					},
-					require: false,
+					required: false,
 				},
 				{
 					model: models.Entry,
@@ -66,7 +66,7 @@ app.get("/", async (req, res) => {
 					where: {
 						userId: req.session.user.id,
 					},
-					require: false,
+					required: false,
 				},
 			],
 		});
