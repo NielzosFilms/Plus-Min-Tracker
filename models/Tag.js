@@ -3,7 +3,7 @@ const { Model } = require("sequelize");
 const passwordHash = require("password-hash");
 
 module.exports = (sequelize, DataTypes) => {
-	class User extends Model {
+	class Tag extends Model {
 		/**
 		 * Helper method for defining associations.
 		 * This method is not a part of Sequelize lifecycle.
@@ -11,30 +11,38 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-
-			User.hasMany(models.Entry, {
-				foreignKey: "userId",
-				as: "entries",
+			Tag.belongsToMany(models.Entry, {
+				through: "EntryTags",
+				foreignKey: "tagId",
+				otherKey: "entryId",
+				as: "plusEntries",
+			});
+			Tag.belongsToMany(models.Entry, {
+				through: "EntryTags",
+				foreignKey: "tagId",
+				otherKey: "entryId",
+				as: "minusEntries",
 			});
 		}
 	}
-	User.init(
+	Tag.init(
 		{
-			username: {
+			id: {
+				type: DataTypes.INTEGER,
+				primaryKey: true,
+				autoIncrement: true,
+			},
+			name: {
 				type: DataTypes.STRING,
 				allowNull: false,
 				unique: true,
-			},
-			password: {
-				type: DataTypes.STRING,
-				allowNull: false,
 			},
 		},
 		{
 			sequelize,
 			paranoid: true,
-			modelName: "User",
+			modelName: "Tag",
 		}
 	);
-	return User;
+	return Tag;
 };
