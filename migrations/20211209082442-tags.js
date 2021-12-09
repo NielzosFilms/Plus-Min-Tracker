@@ -34,7 +34,43 @@ module.exports = {
 			},
 		});
 
-		await queryInterface.createTable("EntryTags", {
+		await queryInterface.createTable("EntryPlusTags", {
+			id: {
+				allowNull: false,
+				autoIncrement: true,
+				primaryKey: true,
+				type: Sequelize.INTEGER,
+			},
+			entryId: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				references: {
+					model: "Entries",
+					key: "id",
+				},
+			},
+			tagId: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				references: {
+					model: "Tags",
+					key: "id",
+				},
+			},
+			createdAt: {
+				type: Sequelize.DATE,
+				allowNull: false,
+			},
+			updatedAt: {
+				type: Sequelize.DATE,
+				allowNull: false,
+			},
+			deletedAt: {
+				type: Sequelize.DATE,
+				allowNull: true,
+			},
+		});
+		await queryInterface.createTable("EntryMinusTags", {
 			id: {
 				allowNull: false,
 				autoIncrement: true,
@@ -80,6 +116,7 @@ module.exports = {
 		 * await queryInterface.dropTable('users');
 		 */
 		await queryInterface.dropTable("Tags");
-		await queryInterface.dropTable("EntryTags");
+		await queryInterface.dropTable("EntryPlusTags");
+		await queryInterface.dropTable("EntryMinusTags");
 	},
 };

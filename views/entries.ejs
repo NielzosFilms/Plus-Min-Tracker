@@ -2,6 +2,7 @@
 	<head>
 		<%- include('partials/head') %>
 	</head>
+
 	<body>
 		<header><%- include('partials/header') %></header>
 		<main class="container">
@@ -18,11 +19,13 @@
 							<tr>
 								<th>Date</th>
 								<th>Comment</th>
+								<th>Plus</th>
+								<th>Minus</th>
 								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
-							<% entries.forEach((entry) => { %>
+							<% entries.forEach((entry)=> { %>
 							<tr>
 								<td>
 									<%= new
@@ -30,6 +33,20 @@
 									%>
 								</td>
 								<td><%= entry.comment %></td>
+								<td>
+									<% entry.plusTags.forEach((tag)=> { %>
+									<span class="badge rounded-pill bg-success"
+										><%= tag.name %></span
+									>
+									<% }) %>
+								</td>
+								<td>
+									<% entry.minusTags.forEach((tag)=> { %>
+									<span class="badge rounded-pill bg-danger"
+										><%= tag.name %></span
+									>
+									<% }) %>
+								</td>
 								<td>
 									<a
 										href="/entries/<%= entry.id %>"

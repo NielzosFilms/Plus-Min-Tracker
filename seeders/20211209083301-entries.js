@@ -61,7 +61,21 @@ module.exports = {
 				updatedAt: new Date(),
 			});
 		}
-		await queryInterface.bulkInsert("EntryTags", taggings, {});
+		await queryInterface.bulkInsert("EntryPlusTags", taggings, {});
+
+		const minusTaggings = [];
+		for (let i = 0; i < 100; i++) {
+			const tagId = tagIds[Math.floor(Math.random() * tagIds.length)];
+			const entryId =
+				entryIds[Math.floor(Math.random() * entryIds.length)];
+			minusTaggings.push({
+				tagId: tagId.id,
+				entryId: entryId.id,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			});
+		}
+		await queryInterface.bulkInsert("EntryMinusTags", minusTaggings, {});
 	},
 
 	down: async (queryInterface, Sequelize) => {
@@ -71,7 +85,8 @@ module.exports = {
 		 * Example:
 		 * await queryInterface.bulkDelete('People', null, {});
 		 */
-		await queryInterface.bulkDelete("EntryTags", null, {});
+		await queryInterface.bulkDelete("EntryMinusTags", null, {});
+		await queryInterface.bulkDelete("EntryPlusTags", null, {});
 		await queryInterface.bulkDelete("Entries", null, {});
 	},
 };

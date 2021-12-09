@@ -17,13 +17,13 @@ module.exports = (sequelize, DataTypes) => {
 			});
 
 			Entry.belongsToMany(models.Tag, {
-				through: "EntryTags",
+				through: "EntryPlusTags",
 				foreignKey: "entryId",
 				otherKey: "tagId",
 				as: "plusTags",
 			});
 			Entry.belongsToMany(models.Tag, {
-				through: "EntryTags",
+				through: "EntryMinusTags",
 				foreignKey: "entryId",
 				otherKey: "tagId",
 				as: "minusTags",
