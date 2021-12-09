@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "node ./src/index.js",
-		"dev": "nodemon --watch ./models --watch ./src --watch ./views --watch ./public ./src/index.js"
+		"start": "NODE_ENV=production node ./src/index.js",
+		"dev": "NODE_ENV=development nodemon --watch ./models --watch ./src --watch ./views --watch ./public ./src/index.js"
 	},
 	"repository": {
 		"type": "git",

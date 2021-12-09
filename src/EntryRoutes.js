@@ -65,6 +65,7 @@ router.post("/entries/create", async (req, res) => {
 		return;
 	}
 	const entry = await models.Entry.create({
+		date: req.body.date,
 		userId: req.session.user.id,
 		comment: req.body.comment,
 	});
@@ -140,6 +141,7 @@ router.post("/entries/:id", async (req, res) => {
 			id: req.params.id,
 		},
 	});
+	entry.date = req.body.date;
 	entry.comment = req.body.comment;
 	if (req.body.plusTags) {
 		if (Array.isArray(req.body.plusTags)) {
