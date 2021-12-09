@@ -89,7 +89,26 @@ app.get("/", async (req, res) => {
 					},
 				};
 			},
-			{ plus: {}, minus: {} }
+			{
+				plus: {
+					1: 0,
+					2: 0,
+					3: 0,
+					4: 0,
+					5: 0,
+					6: 0,
+					7: 0,
+				},
+				minus: {
+					1: 0,
+					2: 0,
+					3: 0,
+					4: 0,
+					5: 0,
+					6: 0,
+					7: 0,
+				},
+			}
 		);
 
 		const dashboardDataWeekdays = {
