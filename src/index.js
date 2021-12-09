@@ -50,6 +50,27 @@ app.get("/", async (req, res) => {
 			],
 		});
 
+		const tags = await models.Tag.findAll({
+			include: [
+				{
+					model: models.Entry,
+					as: "plusEntries",
+					where: {
+						userId: req.session.user.id,
+					},
+					require: false,
+				},
+				{
+					model: models.Entry,
+					as: "minusEntries",
+					where: {
+						userId: req.session.user.id,
+					},
+					require: false,
+				},
+			],
+		});
+
 		const reducedTags = entries.reduce(
 			(acc, curr) => {
 				let currDay = new Date(curr.date).getDay();
@@ -71,9 +92,7 @@ app.get("/", async (req, res) => {
 			{ plus: {}, minus: {} }
 		);
 
-		console.log(reducedTags);
-
-		const dashboardData = {
+		const dashboardDataWeekdays = {
 			type: "bar",
 			data: {
 				labels: [
@@ -112,12 +131,62 @@ app.get("/", async (req, res) => {
 						beginAtZero: true,
 					},
 				},
+				plugins: {
+					legend: {
+						position: "top",
+					},
+					title: {
+						display: true,
+						text: "+ - per weekday",
+					},
+				},
+			},
+		};
+
+		const dashboardDataTags = {
+			type: "bar",
+			data: {
+				labels: tags.map((tag) => tag.name),
+				datasets: [
+					{
+						label: "Plus",
+						data: tags.map((tag) => tag.plusEntries.length),
+						backgroundColor: "rgba(75, 192, 192, 0.2)",
+						borderColor: "rgba(75, 192, 192, 1)",
+						borderWidth: 1,
+					},
+					{
+						label: "Minus",
+						data: tags.map((tag) => tag.minusEntries.length),
+						backgroundColor: "rgba(255, 99, 132, 0.2)",
+						borderColor: "rgba(255, 99, 132, 1)",
+						borderWidth: 1,
+					},
+				],
+			},
+			options: {
+				indexAxis: "y",
+				scales: {
+					y: {
+						beginAtZero: true,
+					},
+				},
+				plugins: {
+					legend: {
+						position: "top",
+					},
+					title: {
+						display: true,
+						text: "+ - per tag",
+					},
+				},
 			},
 		};
 		res.render("dashboard", {
 			user: req.session.user,
 			entries,
-			dashboardData,
+			dashboardDataWeekdays,
+			dashboardDataTags,
 			menu: "dashboard",
 		});
 	} else {
