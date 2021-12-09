@@ -12,20 +12,24 @@
 					<hr />
 					<canvas id="perWeekday" height="120" class="mb-5"></canvas>
 					<canvas id="perTag" height="120" class="mb-5"></canvas>
-					<h1>line graph with increasing dates and + - counts</h1>
-					<h1>
-						Graph showing which + - are more common on certain days
-					</h1>
-					<h1>Graph showing the ratio between + -</h1>
+					<div class="w-50">
+						<canvas id="ratio" width="500" class="mb-5"></canvas>
+					</div>
 					<script type="text/javascript">
 						const weekdayCtx = document
 							.getElementById("perWeekday")
 							.getContext("2d");
-						const perWeekdayChart = new Chart(weekdayCtx, <%- JSON.stringify(dashboardDataWeekdays) %>);
+						new Chart(weekdayCtx, <%- JSON.stringify(dashboardDataWeekdays) %>);
+
 						const tagCtx = document
 							.getElementById("perTag")
 							.getContext("2d");
-						const perTagChart = new Chart(tagCtx, <%- JSON.stringify(dashboardDataTags) %>);
+						new Chart(tagCtx, <%- JSON.stringify(dashboardDataTags) %>);
+
+						const ratioCtx = document
+							.getElementById("ratio")
+							.getContext("2d");
+						new Chart(ratioCtx, <%- JSON.stringify(dashboardDataRatio) %>);
 					</script>
 				</div>
 			</div>
