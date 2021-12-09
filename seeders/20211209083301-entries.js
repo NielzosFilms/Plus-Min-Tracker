@@ -57,8 +57,8 @@ module.exports = {
 			taggings.push({
 				tagId: tagId.id,
 				entryId: entryId.id,
-				createdAt: new Date(),
-				updatedAt: new Date(),
+				createdAt: faker.date.past(),
+				updatedAt: faker.date.past(),
 			});
 		}
 		await queryInterface.bulkInsert("EntryPlusTags", taggings, {});
@@ -71,8 +71,8 @@ module.exports = {
 			minusTaggings.push({
 				tagId: tagId.id,
 				entryId: entryId.id,
-				createdAt: new Date(),
-				updatedAt: new Date(),
+				createdAt: faker.date.past(),
+				updatedAt: faker.date.past(),
 			});
 		}
 		await queryInterface.bulkInsert("EntryMinusTags", minusTaggings, {});

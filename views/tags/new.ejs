@@ -1,0 +1,30 @@
+<html lang="en">
+	<head>
+		<%- include('../partials/head') %>
+	</head>
+	<body>
+		<header><%- include('../partials/header'); %></header>
+		<main class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h1>New Tag</h1>
+					<form action="/tags/new" method="POST">
+						<div class="form-group">
+							<label for="name">Name</label>
+							<input
+								type="text"
+								class="form-control"
+								id="name"
+								name="name"
+								placeholder="Name"
+							/>
+						</div>
+						<button type="submit" class="btn btn-primary">
+							Create
+						</button>
+					</form>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>

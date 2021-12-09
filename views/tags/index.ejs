@@ -1,0 +1,45 @@
+<html lang="en">
+	<head>
+		<%- include('../partials/head') %>
+	</head>
+	<body>
+		<header><%- include('../partials/header'); %></header>
+		<main class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h1>Tags</h1>
+					<p>
+						<a href="/tags/new" class="btn btn-primary">New Tag</a>
+					</p>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% tags.forEach(function(tag) { %>
+							<tr>
+								<td><%= tag.name %></td>
+								<td>
+									<a
+										href="/tags/<%= tag.id %>"
+										class="btn btn-primary"
+										>View</a
+									>
+									<a
+										href="/tags/<%= tag.id %>/delete"
+										class="btn btn-danger"
+										>Delete</a
+									>
+								</td>
+							</tr>
+							<% }); %>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>
