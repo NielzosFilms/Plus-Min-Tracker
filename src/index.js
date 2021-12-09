@@ -50,37 +50,28 @@ app.get("/", async (req, res) => {
 			],
 		});
 
-		const reduceTags = (acc, curr) => {
-			let currDay = new Date(curr.createdAt).getDay();
-			if (currDay === 0) currDay = 7;
-			return {
-				...acc,
-				[currDay]: [...(acc[currDay] || []), curr],
-			};
-		};
-
-		const plusTags = await models.sequelize.query(
-			`SELECT * FROM EntryPlusTags`,
-			{ type: QueryTypes.SELECT }
+		const reducedTags = entries.reduce(
+			(acc, curr) => {
+				let currDay = new Date(curr.date).getDay();
+				if (currDay === 0) currDay = 7;
+				const plusCount = curr.plusTags.length;
+				const minusCount = curr.minusTags.length;
+				return {
+					...acc,
+					plus: {
+						...acc.plus,
+						[currDay]: (acc.plus[currDay] || 0) + plusCount,
+					},
+					minus: {
+						...acc.minus,
+						[currDay]: (acc.minus[currDay] || 0) + minusCount,
+					},
+				};
+			},
+			{ plus: {}, minus: {} }
 		);
 
-		const reducedPlusTags = plusTags.reduce(reduceTags, {});
-
-		const minusTags = await models.sequelize.query(
-			`SELECT * FROM EntryMinusTags`,
-			{ type: QueryTypes.SELECT }
-		);
-
-		const reducedMinusTags = minusTags.reduce(reduceTags, {});
-
-		const getCountPerDay = (reduced) => {
-			for (let i = 1; i <= 7; i++) {
-				if (!reduced[i]) {
-					reduced[i] = [];
-				}
-			}
-			return reduced;
-		};
+		console.log(reducedTags);
 
 		const dashboardData = {
 			type: "bar",
@@ -97,18 +88,18 @@ app.get("/", async (req, res) => {
 				datasets: [
 					{
 						label: "Plus",
-						data: Object.keys(getCountPerDay(reducedPlusTags))
-							.sort()
-							.map((day) => reducedPlusTags[day].length),
+						data: Object.keys(reducedTags.plus).map(
+							(key) => reducedTags.plus[key]
+						),
 						backgroundColor: "rgba(75, 192, 192, 0.2)",
 						borderColor: "rgba(75, 192, 192, 1)",
 						borderWidth: 1,
 					},
 					{
 						label: "Minus",
-						data: Object.keys(getCountPerDay(reducedMinusTags))
-							.sort()
-							.map((day) => reducedMinusTags[day].length),
+						data: Object.keys(reducedTags.minus).map(
+							(key) => reducedTags.minus[key]
+						),
 						backgroundColor: "rgba(255, 99, 132, 0.2)",
 						borderColor: "rgba(255, 99, 132, 1)",
 						borderWidth: 1,

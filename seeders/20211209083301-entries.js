@@ -24,6 +24,7 @@ module.exports = {
 		const entries = [];
 		for (let i = 0; i < 100; i++) {
 			entries.push({
+				date: faker.date.past(),
 				comment: faker.lorem.sentence(),
 				userId: users[0].id,
 				createdAt: new Date(),
@@ -57,8 +58,8 @@ module.exports = {
 			taggings.push({
 				tagId: tagId.id,
 				entryId: entryId.id,
-				createdAt: faker.date.past(),
-				updatedAt: faker.date.past(),
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			});
 		}
 		await queryInterface.bulkInsert("EntryPlusTags", taggings, {});
@@ -71,8 +72,8 @@ module.exports = {
 			minusTaggings.push({
 				tagId: tagId.id,
 				entryId: entryId.id,
-				createdAt: faker.date.past(),
-				updatedAt: faker.date.past(),
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			});
 		}
 		await queryInterface.bulkInsert("EntryMinusTags", minusTaggings, {});

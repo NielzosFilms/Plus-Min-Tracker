@@ -2,6 +2,13 @@ const router = require("express").Router();
 
 const models = require("../models");
 
+const getDateInputFormat = (date) => {
+	const year = date.getFullYear();
+	const month = date.getMonth() + 1;
+	const day = date.getDate();
+	return `${year}-${month}-${day < 10 ? `0${day}` : day}`;
+};
+
 router.get("/entries", async (req, res) => {
 	if (!req.session.user) {
 		res.redirect("/login");
@@ -21,7 +28,7 @@ router.get("/entries", async (req, res) => {
 				as: "minusTags",
 			},
 		],
-		order: [["createdAt", "DESC"]],
+		order: [["date", "DESC"]],
 	});
 	res.render("entries", { entries, user: req.session.user, menu: "entries" });
 });
@@ -36,6 +43,7 @@ router.get("/entries/create", async (req, res) => {
 		validationErrors: [],
 		user: req.session.user,
 		menu: "entries",
+		today: getDateInputFormat(new Date()),
 		tags,
 	});
 });
@@ -51,6 +59,7 @@ router.post("/entries/create", async (req, res) => {
 			validationErrors: ["Comment is required"],
 			user: req.session.user,
 			menu: "entries",
+			today: getDateInputFormat(new Date()),
 			tags,
 		});
 		return;
@@ -103,6 +112,8 @@ router.get("/entries/:id", async (req, res) => {
 		user: req.session.user,
 		menu: "entries",
 		validationErrors: [],
+		today: getDateInputFormat(new Date()),
+		dateVal: getDateInputFormat(new Date(entry.date)),
 		tags,
 	});
 });
@@ -118,6 +129,8 @@ router.post("/entries/:id", async (req, res) => {
 			validationErrors: ["Comment is required"],
 			user: req.session.user,
 			menu: "entries",
+			today: getDateInputFormat(new Date()),
+			dateVal: getDateInputFormat(new Date(entry.date)),
 			tags,
 		});
 		return;
