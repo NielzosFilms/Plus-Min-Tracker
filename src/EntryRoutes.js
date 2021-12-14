@@ -15,7 +15,6 @@ router.get("/entries", async (req, res) => {
 		res.redirect("/login");
 		return;
 	}
-	console.log(req.query);
 	const entries = await models.Entry.findAll({
 		where: {
 			userId: req.session.user.id,
