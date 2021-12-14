@@ -9,11 +9,39 @@
 			<div class="row">
 				<div class="col-md-12">
 					<h1>Entries</h1>
-					<p>
-						<a href="/entries/create" class="btn btn-primary"
-							>New Entry</a
-						>
-					</p>
+					<form action="/entries" method="get">
+						<div class="d-flex align-items-center">
+							<input
+								type="date"
+								class="form-control"
+								id="date"
+								name="date"
+								value="<%= prevDateFilter %>"
+							/>
+							<input
+								type="text"
+								class="form-control ms-2"
+								id="search"
+								name="search"
+								value="<%= prevSearchFilter %>"
+								placeholder="Search"
+							/>
+							<button
+								type="submit"
+								class="btn btn-secondary ms-2"
+							>
+								Search
+							</button>
+							<a href="/entries" class="btn btn-secondary ms-2">
+								Clear
+							</a>
+							<a
+								href="/entries/create"
+								class="btn btn-primary ms-2 w-50"
+								>New Entry</a
+							>
+						</div>
+					</form>
 					<table class="table table-striped">
 						<thead>
 							<tr>

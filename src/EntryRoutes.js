@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { Op } = require("sequelize");
 
 const models = require("../models");
 
@@ -14,9 +15,14 @@ router.get("/entries", async (req, res) => {
 		res.redirect("/login");
 		return;
 	}
+	console.log(req.query);
 	const entries = await models.Entry.findAll({
 		where: {
 			userId: req.session.user.id,
+			...(req?.query?.date ? { date: new Date(req.query.date) } : {}),
+			...(req?.query?.search
+				? { comment: { [Op.like]: `%${req.query.search}%` } }
+				: {}),
 		},
 		include: [
 			{
@@ -30,7 +36,13 @@ router.get("/entries", async (req, res) => {
 		],
 		order: [["date", "DESC"]],
 	});
-	res.render("entries", { entries, user: req.session.user, menu: "entries" });
+	res.render("entries", {
+		entries,
+		user: req.session.user,
+		menu: "entries",
+		prevDateFilter: req?.query?.date || "",
+		prevSearchFilter: req?.query?.search || "",
+	});
 });
 
 router.get("/entries/create", async (req, res) => {
